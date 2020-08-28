@@ -13,13 +13,20 @@ class App extends Component {
     showPeople: false,
   };
 
-  nameChangedHandler = (event) => {
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.people.findIndex((p) => {
+      return p.id === id;
+    });
+    const person = {
+      ...this.state.people[personIndex],
+    };
+    person.name = event.target.value;
+
+    const people = [...this.state.people];
+    people[personIndex] = person;
+
     this.setState({
-      people: [
-        { name: "Max", age: 28 },
-        { name: event.target.value, age: 29 },
-        { name: "Maxik", age: 26 },
-      ],
+      people: people,
     });
   };
 
@@ -56,6 +63,7 @@ class App extends Component {
                 name={person.name}
                 age={person.age}
                 key={person.id}
+                changed={(event) => this.nameChangedHandler(event, person.id)}
               />
             );
           })}
